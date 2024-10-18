@@ -60,32 +60,32 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button fx:id="btnGenerateReport" layoutX="23.0" layoutY="328.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Generate &#10;Report">
+      <Button fx:id="btnGenerateReport" layoutX="23.0" layoutY="308.0" mnemonicParsing="false" onAction="#btnGenerateReportOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Generate &#10;Report">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="btnReset" layoutX="150.0" layoutY="328.0" mnemonicParsing="false" onAction="#btnResetCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Reset">
+      <Button fx:id="btnReset" layoutX="150.0" layoutY="308.0" mnemonicParsing="false" onAction="#btnResetCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Reset">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="btnDelete" layoutX="280.0" layoutY="328.0" mnemonicParsing="false" onAction="#btnDeleteCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Delete">
+      <Button fx:id="btnDelete" layoutX="280.0" layoutY="308.0" mnemonicParsing="false" onAction="#btnDeleteCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Delete">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="btnUpdate" layoutX="404.0" layoutY="328.0" mnemonicParsing="false" onAction="#btnUpdateCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Update">
+      <Button fx:id="btnUpdate" layoutX="404.0" layoutY="308.0" mnemonicParsing="false" onAction="#btnUpdateCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Update">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="btnSave" layoutX="524.0" layoutY="328.0" mnemonicParsing="false" onAction="#btnSaveCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Save">
+      <Button fx:id="btnSave" layoutX="524.0" layoutY="308.0" mnemonicParsing="false" onAction="#btnSaveCustomerOnAction" prefHeight="56.0" prefWidth="102.0" style="-fx-background-color: #b2bec3;" text="Save">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <TableView fx:id="tblCustomer" layoutX="23.0" layoutY="416.0" onMouseClicked="#onClickTable" prefHeight="265.0" prefWidth="603.0">
+      <TableView fx:id="tblCustomer" layoutX="23.0" layoutY="426.0" onMouseClicked="#onClickTable" prefHeight="255.0" prefWidth="603.0">
         <columns>
           <TableColumn fx:id="colCustomerId" prefWidth="97.0" text="Customer Id" />
           <TableColumn fx:id="colName" prefWidth="133.0" text="Name" />
@@ -99,5 +99,10 @@
             <Font size="16.0" />
          </font>
       </Label>
+      <Button fx:id="generateAllCustomer" layoutX="35.0" layoutY="382.0" mnemonicParsing="false" onAction="#generateAllCustomerOnAction" prefHeight="26.0" prefWidth="154.0" text="All Customer Report">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

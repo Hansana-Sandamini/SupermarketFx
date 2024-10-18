@@ -1,9 +1,13 @@
 package com.example.demo3.controller;
 
 import com.example.demo3.dto.CustomerDTO;
+import com.example.demo3.dto.ItemDTO;
+import com.example.demo3.dto.OrderDTO;
+import com.example.demo3.dto.OrderDetailsDTO;
 import com.example.demo3.model.CustomerModel;
 import com.example.demo3.model.ItemModel;
 import com.example.demo3.model.OrderModel;
+import com.example.demo3.tm.CartTM;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -15,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -65,23 +70,27 @@ public class OrdersViewController extends AnchorPane {
     private Label lblUnitPrice;
 
     @FXML
-    private TableColumn<?, ?> colName;
+    private TableColumn<CartTM, String> colName;
 
     @FXML
-    private TableColumn<?, ?> colPrice;
+    private TableColumn<CartTM, Double> colPrice;
 
     @FXML
-    private TableColumn<?, ?> colQuantity;
+    private TableColumn<CartTM, Integer> colQuantity;
 
     @FXML
-    private TableColumn<?, ?> ColItemId;
+    private TableColumn<CartTM, String> ColItemId;
 
     @FXML
-    private TableView<?> tblOrders;
+    private TableColumn<CartTM, Double> colTotal;
+
+    @FXML
+    private TableView<CartTM> tblOrders;
 
     private final OrderModel orderModel= new OrderModel();
     private final CustomerModel customerModel = new CustomerModel();
     private final ItemModel itemModel = new ItemModel();
+    private final ObservableList<CartTM> cartTMS = FXCollections.observableArrayList();
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -120,13 +129,61 @@ public class OrdersViewController extends AnchorPane {
     }
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) {
+    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException {
+        if (tblOrders.getItems().isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Please add items to cart..!").show();
+            return;
+        }
+        if (cmbCustomerId.getSelectionModel().isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Please select customer for place order..!").show();
+            return;
+        }
 
+        String orderId = lblOrderId.getText();
+        Date dateOfOrder = Date.valueOf(lblOrderDate.getText());
+        String customerId = cmbCustomerId.getValue();
+
+        // List to hold order details
+        ArrayList<OrderDetailsDTO> orderDetailsDTOS = new ArrayList<>();
+
+        // Collect data for each item in the cart and add to order details array
+        for (CartTM cartTM : cartTMS) {
+
+            // Create order details for each cart item
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(
+                    orderId,
+                    cartTM.getItemId(),
+                    cartTM.getCartQuantity(),
+                    cartTM.getUnitPrice()
+            );
+
+            // Add to order details array
+            orderDetailsDTOS.add(orderDetailsDTO);
+        }
+
+        // Create an OrderDTO with relevant order data
+        OrderDTO orderDTO = new OrderDTO(
+                orderId,
+                customerId,
+                dateOfOrder,
+                orderDetailsDTOS
+        );
+
+        boolean isSaved = orderModel.saveOrder(orderDTO);
+
+        if (isSaved) {
+            new Alert(Alert.AlertType.INFORMATION, "Order saved..!").show();
+
+            // Reset the page after placing the order
+            refreshPage();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Order fail..!").show();
+        }
     }
 
     @FXML
-    void btnResetOnAction(ActionEvent event) {
-
+    void btnResetOnAction(ActionEvent event) throws SQLException {
+        refreshPage();
     }
 
     @FXML
@@ -137,8 +194,18 @@ public class OrdersViewController extends AnchorPane {
     }
 
     @FXML
-    void cmbItemIdOnAction(ActionEvent event) {
+    void cmbItemIdOnAction(ActionEvent event) throws SQLException {
+        String selectedItemId = cmbItemId.getSelectionModel().getSelectedItem();
+        ItemDTO itemDTO = itemModel.findById(selectedItemId);
 
+        // If item found (itemDTO not null)
+        if (itemDTO != null) {
+
+            // FIll item related labels
+            lblItemName.setText(itemDTO.getName());
+            lblQtyOnHand.setText(String.valueOf(itemDTO.getQuantity()));
+            lblUnitPrice.setText(String.valueOf(itemDTO.getPrice()));
+        }
     }
 }
 
